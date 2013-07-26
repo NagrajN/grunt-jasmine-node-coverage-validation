@@ -1,10 +1,13 @@
 # grunt-jasmine-node-coverage-validation
 Grunt task for jasmine-node using istanbul for code coverage. Validates coverage configuration and fails the task if under the code coverage threshold. Forked off grunt-jasmine-node-coverage by Jarrod Ribble.
 
-There are 4 code coverage threshold va(branches, functions, statements, lines)supported. Each can be between 0 and 100 percent.
+There are 4 code coverage threshold values (branches, functions, statements, lines)supported. 
+
+Each threshold value can be between 0 and 100 percent.
 
 failTask=true is used to flag if task will fail on a missed code coverage threshold.
-failTask = false or not defining it will not fail the task on a missed code coverage threadhold
+
+failTask=false or undefined will not fail the task on a missed code coverage threshold
 
     coverage: {
          options : {
