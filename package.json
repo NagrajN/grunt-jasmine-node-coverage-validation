@@ -21,7 +21,7 @@
     }
   ],
   "main" : "grunt.js",
-  "bin" : "bin/grunt-jasmine-node-validation",
+  "bin" : "bin/grunt-jasmine-node-coverage-validation",
   "engines" : {
     "node" : ">=0.8.0"
   },
