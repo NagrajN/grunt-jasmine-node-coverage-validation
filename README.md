@@ -56,7 +56,7 @@ Help us squash them by submitting an issue that describes how you encountered it
 
 ## Release History
 
-see [GitHub Repository](/nagrajn/grunt-jasmine-node-coverage-validation).
+see [GitHub Repository](grunt-jasmine-node-coverage-validation).
 
 ## License
 Copyright (c) 2013 "nagrajn" Nagraj Naidu & contributors.
