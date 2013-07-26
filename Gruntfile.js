@@ -21,6 +21,12 @@ module.exports = function (grunt) {
       },
       jasmine_node: {
         coverage: {
+          options : {
+            branches : 100 ,
+            functions: 1000,
+            statements:100,
+            lines:1000
+          }
         },
         options: {
           forceExit: true,
@@ -42,6 +48,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadTasks('tasks');
 
-    grunt.registerTask('default', ['jshint' ,'jasmine_node']);
+    //grunt.registerTask('default', ['jshint' ,'jasmine_node']);
+	
+   grunt.registerTask('default', ['jasmine_node']);
+
 
 };

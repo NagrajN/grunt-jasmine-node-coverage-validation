@@ -1,13 +1,16 @@
 module.exports = function (grunt) {
+
     'use strict';
     var isVerbose;
 
     var doCoverage = function (opts, projectRoot, runFn) {
+        debugger;
         var istanbul = require('istanbul'),
             Path = require('path'),
             mkdirp = require('mkdirp'),
             fs = require('fs'),
-            glob = require('glob');
+            glob = require('glob'),
+            CheckCoverage = require('./CheckCoverage.js');
 
         // set up require hooks to instrument files as they are required
         var DEFAULT_REPORT_FORMAT = 'lcov';
@@ -102,6 +105,7 @@ module.exports = function (grunt) {
                     }
                     else {
                         collector.add(cov);
+
                     }
                     if (opts.print !== 'none') {
                         console.error('Writing coverage reports at [' + reportingDir + ']');
@@ -111,6 +115,15 @@ module.exports = function (grunt) {
                         report.writeReport(collector, true);
                     });
                     //return callback();
+
+                    //Added check for summarized coverage
+                    var summary = istanbul.utils.summarizeCoverage(cov);
+
+                    if (!CheckCoverage(summary, opts.options)) {
+                         console.error('\n================================Coverage Warning =================================');
+                         grunt.warn('Code Coverage is less than what is configured. \nTask Options:' + JSON.stringify(opts.options) + "\n");
+                    }
+
                 });
                 runFn();
             });

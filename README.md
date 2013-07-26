@@ -1,17 +1,23 @@
-# grunt-jasmine-node-coverage
-
-A grunt.js task to run your jasmine feature suite using jasmine-node and istanbul for code coverage reports.
+# grunt-jasmine-node-coverage-validation
+Grunt task for jasmine-node using istanbul for code coverage. Validates coverage configuration and fails the task for under coverage. Based off of grunt-jasmine-node-coverage by Jarrod Ribble.
 
 ## Getting Started
-Install this grunt plugin next to your project's grunt.js gruntfile with: `npm install grunt-jasmine-node-coverage`
+Install this grunt plugin next to your project's grunt.js gruntfile with: `npm install grunt-jasmine-node-coverage-validation`
 
 Then add this line to your project's `grunt.js` grunt file:
+
+Coverage Options can be between 0 - 100.
 
 ```javascript
 grunt.initConfig({
   jasmine_node: {
     coverage: {
-
+         options : {
+            branches : 100 ,
+            functions: 1000,
+            statements:100,
+            lines:100
+          }
     },
     options: {
       forceExit: true,
@@ -29,20 +35,22 @@ grunt.initConfig({
   }
 });
 
-grunt.loadNpmTasks('grunt-jasmine-node-coverage');
+grunt.loadNpmTasks('grunt-jasmine-node-coverage-validation');
 
 grunt.registerTask('default', 'jasmine_node');
 ```
 
 ## Bugs
 
-Help us squash them by submitting an issue that describes how you encountered it; please be as specific as possible including operating system, node, grunt, and grunt-jasmine-node-coverage versions.
+Help us squash them by submitting an issue that describes how you encountered it; please be as specific as possible including operating system, node, grunt, and grunt-jasmine-node-coverage-validation versions.
 
 ## Release History
 
-see [GitHub Repository](/jribble/grunt-jasmine-node-coverage).
+see [GitHub Repository](/nagrajn/grunt-jasmine-node-coverage-validation).
 
 ## License
+Copyright (c) 2013 "nagrajn" Nagraj Naidu & contributors.
+Based on grunt-jasmine-node (https://github.com/jasmine-contrib/grunt-jasmine-node-coverage) 
 Copyright (c) 2013 "jribble" Jarrod Ribble & contributors.
 Based on grunt-jasmine-node (https://github.com/jasmine-contrib/grunt-jasmine-node) Copyright (c) 2012 "s9tpepper" Omar Gonzalez & contributors.
 Licensed under the MIT license.
