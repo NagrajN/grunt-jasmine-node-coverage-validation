@@ -7,7 +7,7 @@ Each threshold value can be between 0 and 100 percent.
 
 failTask=true is used to flag if task will fail on a missed code coverage threshold.
 
-failTask=false or undefined will not fail the task on a missed code coverage threshold
+failTask=false undefined will not fail the task on a missed code coverage threshold. This is the default.
 
     coverage: {
          options : {

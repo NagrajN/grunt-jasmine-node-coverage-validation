@@ -1,7 +1,7 @@
 {
   "name" : "grunt-jasmine-node-coverage-validation",
   "description" : "Grunt task for jasmine-node using istanbul for code coverage. Validates coverage configuration and fails the task for under coverage. Based off of grunt-jasmine-node-coverage by Jarrod Ribble.",
-  "version" : "0.0.3",
+  "version" : "0.0.4",
   "homepage" : "https://github.com/nagrajn/grunt-jasmine-node-coverage-validation",
   "author" : {
     "name" : "Nagraj Naidu",
