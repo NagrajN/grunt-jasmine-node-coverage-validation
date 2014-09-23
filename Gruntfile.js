@@ -24,9 +24,9 @@ module.exports = function (grunt) {
           coverage: {
             options : {
               branches : 100 ,
-              functions: 1000,
+              functions: 100,
               statements:100,
-              lines:1000
+              lines:100
             }
           },
           junitreport: {
