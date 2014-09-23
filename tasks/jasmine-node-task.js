@@ -4,13 +4,13 @@ module.exports = function (grunt) {
     var isVerbose;
 
     var doCoverage = function (opts, projectRoot, runFn) {
-        debugger;
+        // debugger;
         var istanbul = require('istanbul'),
             Path = require('path'),
             mkdirp = require('mkdirp'),
             fs = require('fs'),
             glob = require('glob'),
-            CheckCoverage = require('./CheckCoverage.js');
+            checkCoverage = require('./CheckCoverage.js');
 
         // set up require hooks to instrument files as they are required
         var DEFAULT_REPORT_FORMAT = 'lcov';
@@ -49,7 +49,7 @@ module.exports = function (grunt) {
             },
             function (err, matchFn) {
                 if (err) {
-                    return callback(err);
+                    return matchFn(err);
                 }
 
                 var coverageVar = '$$cov_' + new Date().getTime() + '$$',
@@ -67,7 +67,7 @@ module.exports = function (grunt) {
                         collector,
                         cov;
                     if (typeof global[coverageVar] === 'undefined' || Object.keys(global[coverageVar]).length === 0) {
-                        console.error('No coverage information was collected, exit without writing coverage information');
+                        grunt.log.error('No coverage information was collected, exit without writing coverage information');
                         return;
                     } else {
                         cov = global[coverageVar];
@@ -76,8 +76,8 @@ module.exports = function (grunt) {
                     //everything that happens in this exit handler MUST be synchronous
                     mkdirp.sync(reportingDir); //yes, do this again since some test runners could clean the dir initially created
                     if (opts.print !== 'none') {
-                        console.error('=============================================================================');
-                        console.error('Writing coverage object [' + file + ']');
+                        grunt.log.error('=============================================================================');
+                        grunt.log.error('Writing coverage object [' + file + ']');
                     }
                     fs.writeFileSync(file, JSON.stringify(cov), 'utf8');
                     collector = new istanbul.Collector();
@@ -101,26 +101,25 @@ module.exports = function (grunt) {
                                 }
                                 collector.add(fileCov);
                             });
-                        })
+                        });
                     }
                     else {
                         collector.add(cov);
 
                     }
                     if (opts.print !== 'none') {
-                        console.error('Writing coverage reports at [' + reportingDir + ']');
-                        console.error('=============================================================================');
+                        grunt.log.error('Writing coverage reports at [' + reportingDir + ']');
+                        grunt.log.error('=============================================================================');
                     }
                     reports.forEach(function (report) {
                         report.writeReport(collector, true);
                     });
-                    //return callback();
 
                     //Added check for summarized coverage
                     var summary = istanbul.utils.summarizeCoverage(cov);
 
-                    if (!CheckCoverage(summary, opts.options)) {
-                         console.error('\n================================Coverage Warning =================================');
+                    if (!checkCoverage(summary, opts.options)) {
+                         grunt.log.error('\n================================Coverage Warning =================================');
                          grunt.warn('Code Coverage is less than what is configured. \nTask Options:' + JSON.stringify(opts.options) + "\n");
                     }
 
@@ -130,117 +129,75 @@ module.exports = function (grunt) {
 
     };
 
-    grunt.registerTask("jasmine_node", "Runs jasmine-node.", function () {
+    grunt.registerMultiTask("jasmine_node", "Runs jasmine-node with istanbul coverage", function () {
         var jasmine = require('jasmine-node');
-        var util;
-        // TODO: ditch this when grunt v0.4 is released
-        grunt.util = grunt.util || grunt.utils;
-        var _ = grunt.util._;
+        var _ = require("underscore");
 
-        try {
-            util = require('util');
-        } catch (e) {
-            util = require('sys');
-        }
-
-        var projectRoot = grunt.config("jasmine_node.projectRoot") || ".";
-        var specFolders = grunt.config("jasmine_node.specFolders");
-        var forceExit = grunt.config("jasmine_node.options.forceExit") || false;
-        var match = grunt.config("jasmine_node.options.match") || '.';
-        var matchall = grunt.config("jasmine_node.options.matchall") || false;
-        var specNameMatcher = grunt.config("jasmine_node.options.specNameMatcher") || 'spec';
-        var extensions = grunt.config("jasmine_node.options.extensions") || 'js';
-        var useHelpers = grunt.config("jasmine_node.useHelpers") || false;
-
-
-        var coverage = grunt.config("jasmine_node.coverage") || false;
-
-        isVerbose = grunt.config("jasmine_node.verbose");
-        var showColors = grunt.config("jasmine_node.colors");
-
-        // Tell grunt this task is asynchronous.
+        // This is an async task
         var done = this.async();
-        var regExpSpec = new RegExp(match + (matchall ? "" : specNameMatcher + "\\.") + "(" + extensions + ")$", 'i');
+
+        // default options
+        var options = {
+            forceExit: false,
+            match: '.*',
+            matchall: false,
+            specNameMatcher: 'spec',
+            helperNameMatcher: 'helpers',
+            extensions: 'js',
+            useHelpers: false,
+            coverage: false,
+            isVerbose: true,
+            showColors: false,
+            specFolders: [],
+        };
+        // overwrite defaults with grunt config options
+        _.extend(options, this.options());
+        var regexStr = options.match + (options.matchall ? "" : options.specNameMatcher + "\\.") + "(" + options.extensions + ")$";
+        grunt.log.debug("regex: " + regexStr);
+        options.regExpSpec = new RegExp(regexStr, 'i');
+
+        // target src files are used as spec search directories
+        this.files.forEach(function(f) {
+            grunt.log.debug(JSON.stringify(f));
+            Array.prototype.push.apply(options.specFolders, f.src);
+        });
+        if (options.specFolders.length === 0) { options.specFolders = [ "." ]; }
+
         var onComplete = function (runner, log) {
             var exitCode;
-            util.print('\n');
+            grunt.log.writeln("");
+
             if (runner.results().failedCount === 0) {
                 exitCode = 0;
             } else {
                 exitCode = 1;
             }
 
-            if (forceExit) {
+            if (options.forceExit) {
                 process.exit(exitCode);
             }
-            done(exitCode == 0);
+            done(exitCode === 0);
         };
-
 
         var runFn = function () {
 
-
-            if (specFolders == null) {
-                specFolders = [projectRoot];
-            }
-
-            if (_.isUndefined(isVerbose)) {
-                isVerbose = true;
-            }
-
-            if (_.isUndefined(showColors)) {
-                showColors = true;
-            }
-
-
-            var options = {
-                specFolders: specFolders,
-                onComplete: onComplete,
-                isVerbose: isVerbose,
-                showColors: showColors,
-                teamcity: false,
-                useRequireJs: false,
-                regExpSpec: regExpSpec,
-                junitreport: {
-                    report: false,
-                    savePath: "./reports/",
-                    useDotNotation: true,
-                    consolidate: true
-                }
-            };
-
-
-            _.extend(options, grunt.config("jasmine_node.options") || {});
-
-
-            // order is preserved in node.js
-            var legacyArguments = Object.keys(options).map(function (key) {
-                return options[key];
-            });
-
-            if (useHelpers) {
-                jasmine.loadHelpersInFolder(projectRoot,
-                    new RegExp("helpers?\\.(" + extensions + ")$", 'i'));
+            if (options.useHelpers) {
+                var helperRegex = new RegExp(options.helperNameMatcher + "?\\.(" + options.extensions + ")$", 'i');
+                jasmine.loadHelpersInFolder('.', helperRegex);
             }
 
             try {
-                // for jasmine-node@1.0.27 individual arguments need to be passed
-                jasmine.executeSpecsInFolder.apply(this, legacyArguments);
+                // since jasmine-node@1.0.28 an options object need to be passed
+                jasmine.executeSpecsInFolder(options);
+            } catch (e) {
+                grunt.log.error('Failed to execute "jasmine.executeSpecsInFolder": ' + e.stack);
             }
-            catch (e) {
-                try {
-                    // since jasmine-node@1.0.28 an options object need to be passed
-                    jasmine.executeSpecsInFolder(options);
-                } catch (e) {
-                    console.log('Failed to execute "jasmine.executeSpecsInFolder": ' + e.stack);
-                }
-            }
+
         };
 
-        if (coverage) {
-            doCoverage(coverage, projectRoot, runFn);
-        }
-        else {
+        if (options.coverage) {
+            doCoverage(options.coverage, '.', runFn);
+        } else {
             runFn();
         }
     });
