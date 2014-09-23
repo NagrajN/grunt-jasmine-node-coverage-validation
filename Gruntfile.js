@@ -20,20 +20,15 @@ module.exports = function (grunt) {
         all: ['tasks/**/*.js']
       },
       jasmine_node: {
-        coverage: {
-          options : {
-            branches : 100 ,
-            functions: 1000,
-            statements:100,
-            lines:1000
-          }
-        },
         options: {
-          forceExit: true,
-          match: '.',
-          matchall: false,
-          extensions: 'js',
-          specNameMatcher: 'spec',
+          coverage: {
+            options : {
+              branches : 100 ,
+              functions: 100,
+              statements:100,
+              lines:100
+            }
+          },
           junitreport: {
             report: false,
             savePath : "./build/reports/jasmine/",
@@ -41,7 +36,20 @@ module.exports = function (grunt) {
             consolidate: true
           }
         },
-        all: ['spec/']
+        calculator: {
+          options: {
+            specNameMatcher: 'calculator\\.spec',
+          },
+          src: [ 'spec/' ],
+        },
+        objutil: {
+          options: {
+            specNameMatcher: 'obj-util\\.spec',
+          },
+          src: [ 'spec/' ],
+        },
+        all: [ 'spec/' ],
+        nosrc: {}
       }
     });
 

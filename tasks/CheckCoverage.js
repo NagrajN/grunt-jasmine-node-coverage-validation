@@ -1,21 +1,21 @@
-
 "use strict";
 
 var CheckCoverage = function(cov, opts) {
 
 	var ret = false;
 
+	if (!cov) { return false; }
 
-	if (!cov) return false;
+	if (!opts) { return true; }
 
-	if (!opts) return true;
+	if( !opts.branches &&
+		!opts.functions &&
+		!opts.lines &&
+		!opts.statements) {
+		return true;
+	}
 
-	if((!opts.branches) && 
-		(!opts.functions) &&
-		(!opts.lines) &&
-		(!opts.statements)) return true;
-
-	if (!opts.failTask) return true;
+	if (!opts.failTask) { return true; }
 
 	if ((!!opts.branches) && (cov.branches.pct < opts.branches)) {
 		return false;
@@ -39,9 +39,8 @@ var CheckCoverage = function(cov, opts) {
 		return false;
 	} else {
 		ret = true;
-	}		
+	}
 	return ret;
-
-}
+};
 
 module.exports = CheckCoverage;

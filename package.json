@@ -1,44 +1,44 @@
 {
-  "name" : "grunt-jasmine-node-coverage-validation",
-  "description" : "Grunt task for jasmine-node using istanbul for code coverage. Validates coverage configuration and fails the task for under coverage. Based off of grunt-jasmine-node-coverage by Jarrod Ribble.",
-  "version" : "0.0.4",
-  "homepage" : "https://github.com/nagrajn/grunt-jasmine-node-coverage-validation",
-  "author" : {
-    "name" : "Nagraj Naidu",
-    "email" : "nagrajn@live.com"
+  "name": "grunt-jasmine-node-coverage-validation",
+  "description": "Grunt task for jasmine-node using istanbul for code coverage. Validates coverage configuration and fails the task for under coverage. Based off of grunt-jasmine-node-coverage by Jarrod Ribble.",
+  "version": "0.0.4",
+  "homepage": "https://github.com/nagrajn/grunt-jasmine-node-coverage-validation",
+  "author": {
+    "name": "Nagraj Naidu",
+    "email": "nagrajn@live.com"
   },
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/NagrajN/grunt-jasmine-node-coverage-validation.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NagrajN/grunt-jasmine-node-coverage-validation.git"
   },
-  "bugs" : {
-    "url" : "https://github.com/NagrajN/grunt-jasmine-node-coverage-validation/issues"
+  "bugs": {
+    "url": "https://github.com/NagrajN/grunt-jasmine-node-coverage-validation/issues"
   },
-  "licenses" : [
+  "licenses": [
     {
-      "type" : "MIT",
-      "url" : "https://github.com/NagrajN/grunt-jasmine-node-coverage-validation/blob/master/LICENSE-MIT"
+      "type": "MIT",
+      "url": "https://github.com/NagrajN/grunt-jasmine-node-coverage-validation/blob/master/LICENSE-MIT"
     }
   ],
-  "main" : "grunt.js",
-  "bin" : "bin/grunt-jasmine-node-coverage-validation",
-  "engines" : {
-    "node" : ">=0.8.0"
+  "main": "grunt.js",
+  "bin": "bin/grunt-jasmine-node-coverage-validation",
+  "engines": {
+    "node": ">=0.8.0"
   },
-  "scripts" : {
-  },
-  "dependencies" : {
+  "scripts": {},
+  "dependencies": {
+    "glob": "~3.2.1",
+    "istanbul": "0.3.2",
     "jasmine-node": "*",
-    "istanbul": "0.1.22",
     "mkdirp": "0.3.x",
-    "glob": "~3.2.1"
+    "underscore": "^1.7.0"
   },
-  "devDependencies" : {
-    "grunt" : "~0.4.1",
-    "jasmine-node": ">=1.4.0",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "jasmine-node": ">=1.14.0",
     "grunt-contrib-jshint": "~0.1.1"
   },
-  "keywords" : [
+  "keywords": [
     "gruntplugin",
     "grunt",
     "plugins",

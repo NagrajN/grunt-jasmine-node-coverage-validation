@@ -6,4 +6,13 @@ function Calculator() {
     };
 };
 
+/* istanbul ignore next */
+function untested(arg) {
+	if (arg > 5) {
+		console.log("greater than 5");
+	} else {
+		console.log("less than 5");
+	}
+}
+
 module.exports = Calculator;
