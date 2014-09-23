@@ -28,7 +28,7 @@
   "scripts": {},
   "dependencies": {
     "glob": "~3.2.1",
-    "istanbul": "0.1.22",
+    "istanbul": "0.3.2",
     "jasmine-node": "*",
     "mkdirp": "0.3.x",
     "underscore": "^1.7.0"
